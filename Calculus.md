@@ -1,13 +1,9 @@
 **平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
 
-$
-\begin{aligned}
-I 
-&= \int_0^{\frac{\sqrt{2}}{2}} \mathrm{d}x \int_{\sqrt{3}x}^{\sqrt{3(1-x^2)}} x^2 \mathrm{d}y \\
+$\begin{aligned}I &= \int_0^{\frac{\sqrt{2}}{2}} \mathrm{d}x \int_{\sqrt{3}x}^{\sqrt{3(1-x^2)}} x^2 \mathrm{d}y \\
 &= \sqrt{3} (\int_0^{\frac{\sqrt{2}}{2}} x^2\sqrt{1-x^2} \mathrm{d}x- \int_x^{\frac{\sqrt{2}}{2}}x^3 \mathrm{d}x) \\
 &= \sqrt{3}(I_1-I_2)
-\end{aligned}
-$
+\end{aligned}$
 
 $
 \begin{aligned}
