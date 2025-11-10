@@ -1,4 +1,8 @@
 
+|![封面：牛顿-莱布尼茨公式](./images/Calculus/牛顿-莱布尼茨公式.jpg)|
+|:--:|
+| 封面：牛顿-莱布尼茨公式 |
+
 ---
 
 **平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
