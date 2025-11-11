@@ -3,7 +3,7 @@
 |:--:|
 | 封面：牛顿-莱布尼茨公式 |
 
----
+<div style="page-break-after: always;"></div>
 
 **求积分$I=\int_{-1}^1 \frac{x^2}{1+e^x} \mathrm{d}x$。**
 
