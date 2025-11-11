@@ -5,6 +5,18 @@
 
 <div style="page-break-after: always;"></div>
 
+**求不定积分$\int \frac{x-2}{x^2+2x+3} \mathrm{d}x$。**
+
+$\begin{aligned}
+\int \frac{x-2}{x^2+2x+3} \mathrm{d}x 
+&=\int \frac{(x+1)-3}{(x+1)^2+2} \mathrm{d}x \\
+&=\int \frac{(x+1)}{(x+1)^2+2} \mathrm{d}x - 3\int \frac{1}{(x+1)^2+2} \mathrm{d}x \\
+&=\frac{1}{2}\ln(2+(x+1)^2)-\frac{3}{\sqrt{2}}\arctan \frac{x+1}{\sqrt{2}} +C \\
+&=\frac{1}{2}\ln(x^2+2x+3)-\frac{3}{\sqrt{2}}\arctan \frac{x+1}{\sqrt{2}} +C
+\end{aligned}$
+
+---
+
 **求积分$I=\int_{-1}^1 \frac{x^2}{1+e^x} \mathrm{d}x$。**
 
 $\begin{aligned}
