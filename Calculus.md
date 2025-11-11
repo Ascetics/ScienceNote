@@ -5,6 +5,23 @@
 
 ---
 
+**求定积分$I=\int_{-1}^1 \frac{x^2}{1+e^x} \mathrm{d}x$。**
+
+$\begin{aligned}
+I
+&=\int_{-1}^1 \frac{x^2}{1+e^x} \mathrm{d}x \\
+&=\int_0^1 \frac{x^2}{1+e^x} \mathrm{d}x + \int_{-1}^0 \frac{x^2}{1+e^x} \mathrm{d}x \\
+&\xlongequal{\quad 第二部分替换t=-x \quad}\int_0^1 \frac{x^2}{1+e^x} \mathrm{d}x + \int_{1}^0 \frac{(-x)^2}{1+e^{-x}} \mathrm{d}(-x) \\
+&=\int_0^1 \frac{x^2}{1+e^x} \mathrm{d}x + \int_0^1 \frac{x^2}{1+e^{-x}} \mathrm{d}x \\
+&=\int_0^1 \frac{x^2}{1+e^x} + \frac{x^2}{1+e^{-x}} \mathrm{d}x \\
+&=\int_0^1 \frac{x^2(2+e^{-x}+e^x)}{2+e^{-x}+e^x} \mathrm{d}x \\
+&=\int_0^1 x^2 \mathrm{d}x \\
+&= \left.\frac{1}{3}x^3 \right|_0^1 \\
+&= \frac{1}{3}
+\end{aligned}$
+
+---
+
 **平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
 |![黄色部分是平面区域D](./images/Calculus/2018年考研数学三（16）.png)|
 |:--:|
