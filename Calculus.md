@@ -49,14 +49,16 @@ I
 
 ---
 
-**平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
+**（2018年数三（16））平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
 |![黄色部分是平面区域D](./images/Calculus/2018年考研数学三（16）.png)|
 |:--:|
 | 黄色部分是平面区域D |
 
-黄色部分是平面区域D。先对y积分，上下界是椭圆和直线方程。再对x积分，上下界是$0$到$\frac{\sqrt{2}}{2}$。
+黄色部分是平面区域D。先对y积分，上下界是椭圆和直线方程。再对x积分，上下界是$0$到$\frac{\sqrt{2}}{2}$。画出这个区域的Matlab、Octave代码。
+
 ```matlab
 % 通用方法，适用于各种方程
+clear;
 figure;
 hold on;
 
@@ -76,20 +78,18 @@ contour(x, y, f3, [0 0], 'g-', 'LineWidth', 2);  % f3=0
 % 填充满足所有不等式的区域
 % 例如：在f1以上、f2椭圆内、f3右侧的区域
 region = (f1 <= 0) & (f2 <= 0) & (f3 >= 0);
-contourf(x, y, double(region), [0.5 0.5], 'FaceColor', 'cyan', 'FaceAlpha', 0.3);
+contourf(x, y, double(region), [0.5 0.5]);
 
 grid on;
 axis equal;
-xlim([-2, 2]);
-ylim([-2, 2]);
-xlabel('x');
-ylabel('y');
-title('三个方程围成的区域');
-legend('x^2+y^2=4', 'x^2/9+y^2/4=1', 'y=x^2', 'D');
-legend on;
+xlabel('X');
+ylabel('Y');
+title('围成的区域', 'fontname', 'Microsoft YaHei', 'fontsize', 24);
+legend('y=sqrt(3)*x', 'x^2+y^2/3=1', 'x=0', 'D');
 
 hold off;
 ```
+
 $\begin{aligned}
 I 
 &= \int_0^{\frac{\sqrt{2}}{2}} \mathrm{d}x \int_{\sqrt{3}x}^{\sqrt{3(1-x^2)}} x^2 \mathrm{d}y \\
@@ -119,6 +119,48 @@ I&= \sqrt{3}(I_1-I_2)\\
 ---
 
 **计算二重积分$I= \int_0^\pi \int_0^x \frac{\sin t}{\pi-t} \mathrm{d}t \mathrm{d}x$**
+|![确定二重积分区域图形](./images/Calculus/计算二重积分.png)|
+|:--:|
+| 确定二重积分区域图形 |
+
+画出这个区域的Matlab、Octave代码。
+
+```matlab
+% 通用方法，适用于各种方程
+clear;
+figure;
+hold on;
+
+% 创建网格
+[x, t] = meshgrid(linspace(-0.5, 4, 500));
+
+% 定义三个方程
+f1 = x - t; % 直线y=x
+f2 = t; % 直线y=0
+f3 = x - pi;             % 直线 x = pi
+
+% 绘制等高线（方程曲线）
+contour(x, t, f1, [0 0], 'r-', 'LineWidth', 2);  % f1=0
+contour(x, t, f2, [0 0], 'b-', 'LineWidth', 2);  % f2=0
+contour(x, t, f3, [0 0], 'g-', 'LineWidth', 2);  % f3=0
+
+% 填充满足所有不等式的区域
+% 例如：在f1以上、f2椭圆内、f3右侧的区域
+region = (f1 >= 0) & (f2 >= 0) & (f3 <= 0);
+contourf(x, t, double(region), [0.5 0.5]);
+
+grid on;
+axis equal;
+xlabel('X');
+ylabel('T');
+title('围成的区域', 'fontname', 'Microsoft YaHei', 'fontsize', 24);
+legend('t=x', 't=0', 'x=pi', 'D', 'fontsize', 16);
+
+hold off;
+```
+
+黄色部分是积分区域图形，先对t积分，后的对方x积分，确定上下限。
+
 $\begin{aligned}
 I
 &= \int_x^\pi \int_0^x \frac{\sin t}{\pi-t} \mathrm{d}t \mathrm{d}x \\
