@@ -107,3 +107,12 @@ $\begin{aligned}
 \end{aligned}$
 
 ---
+
+**求 $\int_0^\pi \frac{x\sin x}{1+\cos^2 x} \mathrm{d}x$。**
+
+$\begin{aligned}
+\int_0^\pi \frac{x\sin x}{1+\cos^2 x} \mathrm{d}x
+&\xlongequal {\quad x=\frac{\pi}{2}-t \quad} \pi\int_{0}^{\frac{\pi}{2}} \frac{\cos t}{1+\sin^2 t} \mathrm{d}t \\
+&\xlongequal {\quad u=\sin t \quad} \pi\int_{0}^{1} \frac{1}{1+u^2} \mathrm{d}u \\
+&= \left. \pi\arctan u \right|_0^1 = \frac{\pi^2}{4}
+\end{aligned}$
