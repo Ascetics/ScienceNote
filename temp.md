@@ -44,3 +44,24 @@ $\begin{aligned}
 \end{aligned}$
 
 ---
+
+**求 $\lim_{n\to \infty} \int_0^1 \frac{x^n}{1+x} \mathrm{d}x$**
+
+$\begin{aligned}
+\int_0^1 \frac{x^n}{1+x} \mathrm{d}x
+&= \int_0^1 \frac{(1+x)((-1)^{0}x^{n-1} + (-1)^{1}x^{n-2} + \dots + (-1)^{n-2}x^{1} + (-1)^{n-1}x^{0}) + (-1)^n}{1+x} \mathrm{d}x \\
+&= \int_0^1 ((-1)^0x^{n-1} + (-1)^1x^{n-2} + \dots + (-1)^{n-2}x^1 + (-1)^{n-1}x^0) + \frac{(-1)^n}{1+x} \mathrm{d}x \\
+&= \left. \frac{(-1)^{0}x^{n}}{n} + \frac{(-1)^{1}x^{n-1}}{n-1} + \dots + \frac{(-1)^{n-2}x^{2}}{2} + \frac{(-1)^{n-1}x}{1} + (-1)^n\ln(1+x) \right|_0^1 \\
+&= \left.\sum_{k=1}^{n}\frac{(-1)^{n-k}x^{k}}{k} + (-1)^n\ln(1+x) \right|_0^1 \\
+&= (-1)^n(\sum_{k=1}^{n}\frac{(-1)^{k}}{k} + \ln 2) \\
+\end{aligned}$
+
+利用结论，调和级数奇数项和与偶数项和的差为
+$1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \frac{1}{5} - \frac{1}{6} + \dots  = \ln 2$
+
+$\begin{aligned}
+\lim_{n\to \infty} \int_0^1 \frac{x^n}{1+x} \mathrm{d}x
+&= (-1)^{+\infty}(\sum_{k=1}^{{+\infty}}\frac{(-1)^{k}}{k} + \ln 2) = 0
+\end{aligned}$
+
+---
