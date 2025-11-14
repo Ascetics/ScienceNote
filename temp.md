@@ -87,6 +87,15 @@ $\begin{aligned}
 
 ---
 
+**求 $\int \frac{\mathrm{d}x}{\sqrt{x(4-x)}}$。**
+
+$\begin{aligned}
+\int \frac{\mathrm{d}x}{\sqrt{x(4-x)}}
+&\xlongequal {\quad t=\frac{x-2}{2} \quad} \int \frac{1}{\sqrt{1-t^2}} \mathrm{d}t=\arcsin t + C= \arcsin(\frac{x-2}{2})+C
+\end{aligned}$
+
+---
+
 **求 $\lim_{n\to \infty} \int_0^1 \frac{x^n}{1+x} \mathrm{d}x$。**
 
 $\begin{aligned}
