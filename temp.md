@@ -21,7 +21,7 @@ $\begin{cases}
 
 **求 $\int \frac{1}{x+x^3} \mathrm{d}x$、$\int \frac{4}{x+x^4} \mathrm{d}x$。**
 
-思路：大方向是构造 $\ln{f(x)}$， $f(x)$ 是分母，其导数冗余性再消除。
+思路：大方向是构造 $\ln{f(x)}$， $f(x)$ 是分母，其导数中的冗余项再想办法消除。
 
 $\begin{aligned}
 f(x)  &= \ln(x+x^B) \\
@@ -52,9 +52,9 @@ $\frac{x^2+1}{(x+2)(x+1)^2}= \frac{A}{x+2} + \frac{B}{x+1} + \frac{C}{(x+1)^2}=\
 
 解方程组
 $\begin{cases}
-A  &+  B &     &= 1 \\
-2A &+ 3B &+ C  &= 0 \\
-A  &+ 2B &+ 2C &= 1
+&A  &+ &B  &  &   &= 1 \\
+&2A &+ &3B &+ &C  &= 0 \\
+&A  &+ &2B &+ &2C &= 1
 \end{cases} 
 \Rightarrow 
 \left[
@@ -71,13 +71,7 @@ A  &+ 2B &+ 2C &= 1
 0 & 1 & 0 & -4\\
 0 & 0 & 1 & 2
 \end{array}
-\right]
-\Rightarrow 
-\begin{cases}
-A &= 5 \\
-B &= -4 \\
-C &= 2
-\end{cases}$
+\right]$
 
 $\begin{aligned}
 \int \frac{x^2+1}{(x+2)(x+1)^2} \mathrm{d}x
