@@ -45,7 +45,49 @@ $\begin{aligned}
 
 ---
 
-**求 $\lim_{n\to \infty} \int_0^1 \frac{x^n}{1+x} \mathrm{d}x$**
+**求 $\int \frac{x^2+1}{(x+2)(x+1)^2} \mathrm{d}x$。**
+
+思路：待定系数法。设
+$\frac{x^2+1}{(x+2)(x+1)^2}= \frac{A}{x+2} + \frac{B}{x+1} + \frac{C}{(x+1)^2}=\frac{(A+B)x^2+(2A+3B+C)x+(A+2B+2C)}{(x+2)(x+1)^2}$
+
+解方程组
+$\begin{cases}
+A  &+  B &     &= 1 \\
+2A &+ 3B &+ C  &= 0 \\
+A  &+ 2B &+ 2C &= 1
+\end{cases} 
+\Rightarrow 
+\left[
+\begin{array}{ccc|c}
+1 & 1 & 0 & 1\\
+2 & 3 & 1 & 0\\
+1 & 2 & 2 & 1
+\end{array}
+\right]
+\Rightarrow 
+\left[
+\begin{array}{ccc|c}
+1 & 0 & 0 & 5\\
+0 & 1 & 0 & -4\\
+0 & 0 & 1 & 2
+\end{array}
+\right]
+\Rightarrow 
+\begin{cases}
+A &= 5 \\
+B &= -4 \\
+C &= 2
+\end{cases}$
+
+$\begin{aligned}
+\int \frac{x^2+1}{(x+2)(x+1)^2} \mathrm{d}x
+&= \int \frac{5}{x+2} - \frac{4}{x+1} + \frac{2}{(x+1)^2} \mathrm{d}x \\
+&=5\ln|x+2|-4\ln|x+1|-\frac{2}{x+1}+C
+\end{aligned}$
+
+---
+
+**求 $\lim_{n\to \infty} \int_0^1 \frac{x^n}{1+x} \mathrm{d}x$。**
 
 $\begin{aligned}
 \int_0^1 \frac{x^n}{1+x} \mathrm{d}x
