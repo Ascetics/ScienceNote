@@ -32,7 +32,7 @@ $\begin{aligned}
 \int \frac{A}{x+x^B} \mathrm{d}x 
 &= A(\int \frac{1+Bx^{B-1}}{x+x^B} \mathrm{d}x - \int \frac{Bx^{B-1}}{x+x^B} \mathrm{d}x) \\
 &= A(\int \frac{1}{x+x^B} \mathrm{d}(x+x^B) - \frac{B}{B-1} \int \frac{1}{1+x^{B-1}} \mathrm{d}(1+x^{B-1})) \\ 
-&= A(\ln|x+x^B| + \frac{B}{B-1}\ln|1+x^{B-1}|) \\
+&= A(\ln|x+x^B| - \frac{B}{B-1}\ln|1+x^{B-1}|) \\
 &= \frac{A}{B-1}\ln|\frac{x^B}{x+x^B}| + C
 \end{aligned}$
 
