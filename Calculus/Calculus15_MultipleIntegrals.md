@@ -5,7 +5,7 @@
 ---
 
 **（2018年数三（16））平面区域D是由 $x=0$, $y=\sqrt{3(1-x^2)}$, $y=\sqrt{3}x$ 围成的，求二重积分 $I= \iint \limits_D x^2 \mathrm{d}x \mathrm{d}y$。**
-|![黄色部分是平面区域D](./images/Calculus/2018年考研数学三（16）.png)|
+|![黄色部分是平面区域D](./images/2018年考研数学三（16）.png)|
 |:--:|
 | 黄色部分是平面区域D |
 
@@ -74,7 +74,7 @@ I&= \sqrt{3}(I_1-I_2)\\
 ---
 
 **计算二重积分$I= \int_0^\pi \int_0^x \frac{\sin t}{\pi-t} \mathrm{d}t \mathrm{d}x$**
-|![确定二重积分区域图形](./images/Calculus/计算二重积分.png)|
+|![确定二重积分区域图形](./images/计算二重积分.png)|
 |:--:|
 | 确定二重积分区域图形 |
 
