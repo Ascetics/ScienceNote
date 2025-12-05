@@ -65,27 +65,27 @@ if(isset($_POST['upload']))
 	if(!empty($_FILES['image']['name']))
 	{
 		$iname=mysqli_real_escape_string($conn,$_FILES['image']['name']);
-	$r=pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
-	$image=array('jpeg','jpg','gif','png');
-	if(in_array($r,$image))
-	{
-		$finfo = @new finfo(FILEINFO_MIME); 
-	$filetype = @$finfo->file($_FILES['image']['tmp_name']);
-		if(preg_match('/image\/jpeg/',$filetype )  || preg_match('/image\/png/',$filetype ) || preg_match('/image\/gif/',$filetype ))
-				{
-					if (move_uploaded_file($_FILES['image']['tmp_name'], 'uploaded_images/'.$_FILES['image']['name']))
-							 {
-							  echo "Uploaded successfully ";
-							  $update='insert into users(name,address,image,id) values(\''.$name.'\',\''.$address.'\',\''.$iname.'\', \''.$id.'\')'; 
-							 mysqli_query($conn, $update);
-							  
-							}
-				}
+		$r=pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
+		$image=array('jpeg','jpg','gif','png');
+		if(in_array($r,$image))
+		{
+			$finfo = @new finfo(FILEINFO_MIME); 
+			$filetype = @$finfo->file($_FILES['image']['tmp_name']);
+			if(preg_match('/image\/jpeg/',$filetype )  || preg_match('/image\/png/',$filetype ) || preg_match('/image\/gif/',$filetype ))
+			{
+				if (move_uploaded_file($_FILES['image']['tmp_name'], 'uploaded_images/'.$_FILES['image']['name']))
+							{
+							echo "Uploaded successfully ";
+							$update='insert into users(name,address,image,id) values(\''.$name.'\',\''.$address.'\',\''.$iname.'\', \''.$id.'\')'; 
+							mysqli_query($conn, $update);
+							
+						}
+			}
 			else
 			{
 				echo "<br>i told you dear, only png,jpg and gif file are allowed";
 			}
-	}
+		}
 	else
 	{
 		echo "<br>only png,jpg and gif file are allowed";
