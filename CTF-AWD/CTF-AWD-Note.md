@@ -122,7 +122,9 @@ $run = " select * from auth where pass='\' and uname=' or 1=1#' "
 | phpmyadmin |
 
 
-## 审计/show.php，尝试getshell
+## 审计/show.php，尝试上传webshell
+远程代码执行RCE (Remote Code Execution)。
+关注函数：system()、exec()、shell_exec()、eval()、assert()。  
 
 登录后的/panel.php有2种操作Show Users和Add Users。panel.php源代码在[./src/Billu-panel.php](./src/Billu-panel.php)。
 
@@ -134,15 +136,26 @@ $run = " select * from auth where pass='\' and uname=' or 1=1#' "
 |:--:|
 | Add Users |
 
-远程代码执行RCE (Remote Code Execution)。
-关注函数：system()、exec()、shell_exec()、eval()、assert()。
-
-使用命令制作图片马。上传一个图片，抓包。
+尝试直接上传一句话木马、修改扩展名的木马，都失败。审计代码发现做了扩展名、MagicNumber过滤。代码详见[./src/Billu-panel.php](./src/Billu-panel.php) 注释内容。那么可以考虑上传带有MagicNumber的木马。在cmd中用以下命令制作图片马。成功上传shell.png。
 ```shell
 copy pic.jpg/b + muma.php/a shell.jpg
-```
+```  
 
-然后访问这张图片。图片以包含形式显示，在php文件中会被当成代码执行。同时传入木马的参数。
+或者考虑在修改扩展名的木马加上MagicNumber，也能达到绕过的目的。
+
+|![上传webshell](./images/Billu08-UploadShell.png)|
+|:--:|
+| 上传图片马 |
+
+## 利用webshell来getshell
+
+如果图片在Show Users里显示，那么就是一张图片，不能作为webshell利用。
+
+继续审计panel.php代码[./src/Billu-panel.php](./src/Billu-panel.php) ，发现除了Add、Show以外还有一个else分支。  
+
+在这个分支里，图片以包含形式显示，在php文件中会被当成代码执行。我们在Show Users里找到这站个图片，在新标签页显示这张图片，就可以得到图片的路径http://192.168.2.128/uploaded_images/shell.png。  
+
+然后访问这张图片。同时传入木马的参数。
 
 bash + nc
 
