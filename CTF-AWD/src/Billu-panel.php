@@ -37,14 +37,14 @@ if(isset($_POST['continue'])) // 点击continue按钮
 	
 	if($choice==='add')
 	{
-       		include($dir.'/'.$choice.'.php'); // 如果选择add，那么包含add.php。
-			die();
+		include($dir.'/'.$choice.'.php'); // 如果选择add，那么包含add.php。
+		die();
 	}
 	
     if($choice==='show')
 	{
         
-	include($dir.'/'.$choice.'.php'); // 如果选择show，那么包含show.php。
+		include($dir.'/'.$choice.'.php'); // 如果选择show，那么包含show.php。
 		die();
 	}
 	else
