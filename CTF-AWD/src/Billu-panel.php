@@ -25,31 +25,31 @@ echo '<hr><br>';
 echo '<form method=post>
 
 <select name=load>
-    <option value="show">Show Users</option>
+    <option value="show">Show Users</option> 
 	<option value="add">Add User</option>
 </select> 
 
  &nbsp<input type=submit name=continue value="continue"></form><br><br>';
-if(isset($_POST['continue']))
+if(isset($_POST['continue'])) // 点击continue按钮
 {
 	$dir=getcwd();
 	$choice=str_replace('./','',$_POST['load']);
 	
 	if($choice==='add')
 	{
-       		include($dir.'/'.$choice.'.php');
+       		include($dir.'/'.$choice.'.php'); // 如果选择add，那么包含add.php。
 			die();
 	}
 	
     if($choice==='show')
 	{
         
-		include($dir.'/'.$choice.'.php');
+	include($dir.'/'.$choice.'.php'); // 如果选择show，那么包含show.php。
 		die();
 	}
 	else
 	{
-		include($dir.'/'.$_POST['load']);
+		include($dir.'/'.$_POST['load']); // 此else分支，包含$_POST['load']，可以利用图片马。
 	}
 	
 }
