@@ -27,9 +27,11 @@ Username :- <Input type=text name=un> &nbsp Password:- <input type=password name
 }
 if(isset($_POST['login']))
 {
-	$uname=str_replace('\'','',urldecode($_POST['un']));
-	$pass=str_replace('\'','',urldecode($_POST['ps']));
-	$run='select * from auth where  pass=\''.$pass.'\' and uname=\''.$uname.'\'';
+	$uname=str_replace('\'','',urldecode($_POST['un'])); // 仅对单引号做了替换
+	$pass=str_replace('\'','',urldecode($_POST['ps']));  // 仅对单引号做了替换
+	$run='select * from auth where pass=\''.$pass.'\' and uname=\''.$uname.'\'';
+	// 'select * from auth where pass=\''  .$pass  .'\' and uname=\''  .$uname  .'\''
+	// `select * from auth where pass=' .$pass ' and uname=' .$uname '` 构造万能密码
 	$result = mysqli_query($conn, $run);
 if (mysqli_num_rows($result) > 0) {
 

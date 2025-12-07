@@ -65,12 +65,21 @@ if(isset($_POST['upload']))
 	if(!empty($_FILES['image']['name']))
 	{
 		$iname=mysqli_real_escape_string($conn,$_FILES['image']['name']);
-		$r=pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION);
-		$image=array('jpeg','jpg','gif','png');
+		$r=pathinfo($_FILES['image']['name'],PATHINFO_EXTENSION); // 提取了文件扩展名
+		$image=array('jpeg','jpg','gif','png'); // 文件扩展名白名单
 		if(in_array($r,$image))
 		{
-			$finfo = @new finfo(FILEINFO_MIME); 
+			$finfo = @new finfo(FILEINFO_MIME); // 创建一个finfo对象，用于文件信息检测。
+												// @ 符号用于抑制可能出现的错误。
+												// FILEINFO_MIME 常量表示我们要获取MIME类型
 			$filetype = @$finfo->file($_FILES['image']['tmp_name']);
+												// 获取上传文件的MIME类型
+												// $_FILES['image']['tmp_name'] 是上传文件的临时存储路径		
+												// 底层调用关系
+												// PHP finfo类 → libmagic库 → 系统的magic.mgc数据库
+												// JPEG:     FF D8 FF E0           // JFIF格式
+												// PNG:      89 50 4E 47 0D 0A 1A 0A
+												// GIF:      47 49 46 38 37 61 或 47 49 46 38 39 61										
 			if(preg_match('/image\/jpeg/',$filetype )  || preg_match('/image\/png/',$filetype ) || preg_match('/image\/gif/',$filetype ))
 			{
 				if (move_uploaded_file($_FILES['image']['tmp_name'], 'uploaded_images/'.$_FILES['image']['name']))
