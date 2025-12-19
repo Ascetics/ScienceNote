@@ -20,5 +20,5 @@ pip install anthropic  # 针对LLM模型，API-Inference也支持与Anthropic AP
 
 ```shell
 conda activate ai                  # 激活虚拟环境
-conda install dashscope
+pip install dashscope              # 安装dashscope
 ```
