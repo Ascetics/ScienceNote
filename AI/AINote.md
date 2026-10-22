@@ -6,6 +6,25 @@ Qwen/Qwen3.6-35B-A3B
 Qwen/Qwen3.8-27B-FP8
 千问/版本号-总参数量270亿-量化参数精度8
 
+# kali安装qwen，用qwen部署hermes
+
+更新源，安装npm
+```bash
+sudo apt update
+sudo apt install npm
+```
+
+用npm安装qwen
+```bash
+npm install -g @qwen-code/qwen-code@latest
+```
+
+安装后选择"Third-party Providers"，选择deepseek-flash，输入API_KEY。
+
+
+用qwen安装hermes。以root登录kali安装hermes话术如下：
+hermes安装文件存放在/root/Desktop/hermes-agent-main里。
+先阅读README.md文件，再帮我安装，确保能正确运行hermes和界面。
 
 
 # 数据标注 Data Label
